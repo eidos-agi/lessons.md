@@ -30,6 +30,12 @@ def register(app: typer.Typer) -> None:
         origin_task: Annotated[
             Optional[str], typer.Option(help="Originating task id.")
         ] = None,
+        applies_when: Annotated[
+            Optional[str],
+            typer.Option(
+                help="Situation trigger: when should the next agent apply this?"
+            ),
+        ] = None,
         json_: Annotated[
             bool, typer.Option("--json", "-J", help="JSON output.")
         ] = False,
@@ -45,6 +51,7 @@ def register(app: typer.Typer) -> None:
             confidence=confidence,
             concerns=parse_str_list(concerns, "--concerns"),
             origin_task=origin_task,
+            applies_when=applies_when,
         )
         emit(result, json_mode=json_)
 
@@ -66,6 +73,23 @@ def register(app: typer.Typer) -> None:
             project_id=project_id,
             include_superseded=include_superseded,
         )
+        emit(result, json_mode=json_)
+
+    @app.command("relevant")
+    def cmd_relevant(
+        project_id: Annotated[str, typer.Option(help="Project GUID.")],
+        query: Annotated[
+            Optional[str],
+            typer.Argument(help="Optional tokens to match title, claim, applies-when."),
+        ] = None,
+        json_: Annotated[
+            bool, typer.Option("--json", "-J", help="JSON output.")
+        ] = False,
+    ) -> None:
+        """Hand the caller the open lessons they should read before acting."""
+        from ._app import emit
+
+        result = _lesson.lesson_relevant(project_id=project_id, query=query)
         emit(result, json_mode=json_)
 
     @app.command("lesson-view")
@@ -101,6 +125,10 @@ def register(app: typer.Typer) -> None:
             typer.Option("--concerns", help="JSON array of concerns."),
         ] = None,
         status: Annotated[Optional[str], typer.Option(help="New status.")] = None,
+        applies_when: Annotated[
+            Optional[str],
+            typer.Option(help="Situation trigger: when to apply this lesson."),
+        ] = None,
         json_: Annotated[
             bool, typer.Option("--json", "-J", help="JSON output.")
         ] = False,
@@ -118,6 +146,7 @@ def register(app: typer.Typer) -> None:
             confidence=confidence,
             concerns=parse_str_list(concerns, "--concerns"),
             status=status,
+            applies_when=applies_when,
         )
         emit(result, json_mode=json_)
 

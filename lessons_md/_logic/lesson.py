@@ -42,6 +42,7 @@ _FM_ORDER = (
     "date",
     "confidence",
     "claim",
+    "applies_when",
     "origin_task",
     "promotes_to",
     "supersedes",
@@ -138,6 +139,7 @@ def lesson_create(
     confidence: str = "LOW",
     concerns: list[str] | None = None,
     origin_task: str | None = None,
+    applies_when: str | None = None,
 ) -> str:
     """Create a lesson. CONFIRMED is illegal until research earns it."""
     claim_gate = gate_claim_present(claim)
@@ -154,6 +156,7 @@ def lesson_create(
         "date": today(),
         "confidence": confidence,
         "claim": claim,
+        "applies_when": applies_when,
         "origin_task": origin_task,
         "promotes_to": _default_promotes_to(),
         "supersedes": None,
@@ -186,6 +189,44 @@ def lesson_list(project_id: str, include_superseded: bool = False) -> str:
     )
 
 
+def _haystack(fm: dict) -> str:
+    return " ".join(
+        str(fm.get(key) or "") for key in ("id", "title", "claim", "applies_when")
+    ).lower()
+
+
+def lesson_relevant(project_id: str, query: str | None = None) -> str:
+    """Force retrieval: open lessons the next agent should see before acting."""
+    project_root = get_project(project_id)
+    lessons = [
+        lesson
+        for lesson in list_lessons(project_root, include_superseded=False)
+        if lesson.frontmatter.get("status") != "superseded"
+    ]
+    tokens = [t for t in (query or "").lower().split() if t]
+    if tokens:
+        lessons = [
+            lesson
+            for lesson in lessons
+            if all(token in _haystack(lesson.frontmatter) for token in tokens)
+        ]
+    if not lessons:
+        if query:
+            return f"No open lessons match {query!r}."
+        return "No open lessons. Next session will not be handed anything."
+    lines = ["Open lessons (read these before acting):", ""]
+    for lesson in lessons:
+        fm = lesson.frontmatter
+        lines.append(
+            f"**{fm.get('id', '?')}** [{fm.get('confidence', '?')}] — {fm.get('title', '')}"
+        )
+        if fm.get("claim"):
+            lines.append(f"  {fm['claim']}")
+        if fm.get("applies_when"):
+            lines.append(f"  when: {fm['applies_when']}")
+    return "\n".join(lines)
+
+
 def lesson_view(project_id: str, lesson_id: str) -> str:
     """View a lesson's full frontmatter and body."""
     project_root = get_project(project_id)
@@ -203,6 +244,7 @@ def lesson_update(
     confidence: str | None = None,
     concerns: list[str] | None = None,
     status: str | None = None,
+    applies_when: str | None = None,
 ) -> str:
     """Update a lesson. Renames the file when the title changes."""
     project_root = get_project(project_id)
@@ -223,6 +265,8 @@ def lesson_update(
         fm["concerns"] = concerns
     if status is not None:
         fm["status"] = status
+    if applies_when is not None:
+        fm["applies_when"] = applies_when
     if append_content:
         new_content = f"{lesson.content}\n\n{append_content}".strip()
     elif content is not None:

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-08-17
+
+### Added
+- Forced retrieval at session start (`project-set` prints open lessons; new `relevant [query]` command). Decision: `research/make-it-better`.
+- Optional `--applies-when` on create/update so matching is not only title keywords.
+
+### Research
+- New research.md project at `research/make-it-better` with external sources (GAO-01-1015R, Wharton/Senge AAR, Tsinghua agent-memory taxonomy), content hashes, disconfirmation, locked criteria, cold peer review (all CHALLENGED), scores, and DECISION.md.
+
 ## [0.3.0] - 2026-08-17
 
 ### Added

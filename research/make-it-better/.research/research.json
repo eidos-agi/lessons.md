@@ -1,0 +1,35 @@
+{
+  "id": "85d14d8a-cdec-4d4e-b1dd-b661948b35bf",
+  "version": "0.1.0",
+  "projectName": "make-lessons-md-better",
+  "created": "2026-08-17",
+  "phase": "decided",
+  "transitions": [
+    {
+      "phase": "research",
+      "date": "2026-08-17"
+    },
+    {
+      "phase": "locked",
+      "date": "2026-08-17",
+      "note": "Criteria weights frozen"
+    },
+    {
+      "phase": "reviewed",
+      "date": "2026-08-17",
+      "note": "Peer review by explore-subagent (cold, read-only)"
+    },
+    {
+      "phase": "scored",
+      "date": "2026-08-17",
+      "note": "Scored candidate: status-quo"
+    },
+    {
+      "phase": "decided",
+      "date": "2026-08-17",
+      "note": "Ship forced retrieval at session start: project-set and a relevant command must print matching open "
+    }
+  ],
+  "question": "What should lessons.md do next so a recorded lesson changes the next agent's behavior, instead of sitting in a markdown file?",
+  "context": "v0.3.0 can create/list/promote lessons and shells out to research-md. The operator asked whether any external research informed 'how to make it better.' Prior work only inspected sibling repos. This project is the actual research.md process: external sources, hashes, disconfirmation, candidates, locked criteria, review, decision."
+}

@@ -65,9 +65,11 @@ MCP is razor-thin help. Real work is Bash: `lessons-md <command>`.
 ## Agent workflow
 
 ```
-project_set            Register project, get project_id
+project_set            Register project, get project_id, **see open lessons**
     |
-status                 Health + integrity (start every session here)
+relevant [query]       Hand the next agent the lessons to read before acting
+    |
+status                 Health + integrity
     |
 lesson_create          Record what execution taught (default LOW)
     |                  Advisory: pass --origin-task if a docket.md task produced this

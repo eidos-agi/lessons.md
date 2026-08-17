@@ -38,12 +38,25 @@ def project_init(path: str, name: str | None = None) -> str:
 
 
 def project_set(path: str) -> str:
-    """Register an existing lessons.md project for this session."""
+    """Register an existing lessons.md project for this session.
+
+    Always hands the caller the open lessons. That is the decision in
+    research/make-it-better: retrieval at the next decision, not pull-only.
+    """
     result = register_project(path)
-    return (
-        f"Project registered: **{result['project']}**\nproject_id: `{result['id']}`\n\n"
-        "Use this project_id in all subsequent calls."
-    )
+    lines = [
+        f"Project registered: **{result['project']}**",
+        f"project_id: `{result['id']}`",
+        "",
+        "Use this project_id in all subsequent calls.",
+    ]
+    try:
+        from .lesson import lesson_relevant
+
+        lines.extend(["", lesson_relevant(result["id"])])
+    except Exception:
+        pass
+    return "\n".join(lines)
 
 
 def project_list() -> str:

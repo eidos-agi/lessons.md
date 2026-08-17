@@ -100,6 +100,7 @@ def _build_top_level_help() -> str:
             "LESSONS (CONFIRMED is illegal until research.md earns it):",
             "  lessons-md lesson-create                  # new lesson (default LOW)",
             "  lessons-md lesson-list                    # list (optionally include superseded)",
+            "  lessons-md relevant [query]               # open lessons to read before acting",
             "  lessons-md lesson-view <id>               # full lesson detail",
             "  lessons-md lesson-update <id>             # update fields / append body",
             "  lessons-md lesson-supersede <id>          # replace with a new lesson",

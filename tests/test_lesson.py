@@ -8,6 +8,7 @@ from lessons_md._logic.lesson import (
     lesson_create,
     lesson_list,
     lesson_promote,
+    lesson_relevant,
     lesson_supersede,
     lesson_update,
     lesson_view,
@@ -152,6 +153,32 @@ class TestPromote:
         pid = _setup_project(tmp_path)
         lesson_create(pid, "Needs a target", "Promotion needs a destination.")
         _assert_rejected(lesson_promote, pid, "LESSON-0001", needle="research")
+
+    def test_relevant_lists_open_and_matches_applies_when(self, tmp_path):
+        pid = _setup_project(tmp_path)
+        lesson_create(
+            pid,
+            "Promote by running research-md",
+            "Shell out to research-md on promote.",
+            applies_when="improving lessons.md after a session",
+        )
+        all_open = lesson_relevant(pid)
+        assert "LESSON-0001" in all_open
+        assert "read these before acting" in all_open
+        matched = lesson_relevant(pid, "improving lessons.md")
+        assert "LESSON-0001" in matched
+        assert "when:" in matched
+        missed = lesson_relevant(pid, "railway deploy")
+        assert "No open lessons match" in missed
+
+    def test_project_set_hands_open_lessons(self, tmp_path):
+        from lessons_md._logic.project import project_set
+
+        pid = _setup_project(tmp_path)
+        lesson_create(pid, "Force retrieval", "project-set must print open lessons.")
+        out = project_set(str(tmp_path))
+        assert "LESSON-0001" in out
+        assert "Force retrieval" in out
 
     def test_view_missing_raises(self, tmp_path):
         pid = _setup_project(tmp_path)
