@@ -1,0 +1,52 @@
+{
+  "id": "LOOK-0002",
+  "topic": "M1 only: scoring-matrix.md Weighted totals and DECISION.md citing 76 not raw 40. Did weights get applied? Did ranking change?",
+  "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0002 - m1-only-scoring-matrix-md-weighted-totals-and-deci",
+  "project_id": "81ad2492-b543-49fb-9e68-cd4271939752",
+  "target": "/Users/dshanklinbv/repos-eidos-agi/lessons.md",
+  "ok": true,
+  "dry_run": false,
+  "stub": false,
+  "used": [
+    "codex",
+    "gemini"
+  ],
+  "lenses": [
+    "socratic",
+    "simplicity"
+  ],
+  "round1": [
+    {
+      "lens": "simplicity",
+      "harness": "gemini",
+      "rc": 1,
+      "error": "Warning: Basic terminal detected (TERM=dumb). Visual rendering will be limited. For the best experience, use a terminal emulator with truecolor support.\nError authenticating: IneligibleTierError: This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products: https://antigravity.google\n    at throwIneligibleOrProjectIdError (file:///opt/homebrew/lib/node_modules/@google/gemini-cli/bundle/chunk-VLV2BYPM.js:300912:11)\n    at _doSetupUser (file:///opt/homebrew/lib/node_modules/@google/gemini-cli/bundle/chunk-VLV2BYPM.js:300901:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {\n  ineligibleTiers: [\n    {\n      reasonCode: 'UNSUPPORTED_CLIENT',\n      reasonMessage: 'Thi",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0002 - m1-only-scoring-matrix-md-weighted-totals-and-deci/lenses/simplicity-gemini.md",
+      "n_findings": 0
+    },
+    {
+      "lens": "socratic",
+      "harness": "codex",
+      "rc": 0,
+      "error": "",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0002 - m1-only-scoring-matrix-md-weighted-totals-and-deci/lenses/socratic-codex.md",
+      "n_findings": 1
+    }
+  ],
+  "debate": [
+    {
+      "harness": "codex",
+      "rc": 0,
+      "error": "",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0002 - m1-only-scoring-matrix-md-weighted-totals-and-deci/debate/codex.md"
+    },
+    {
+      "harness": "gemini",
+      "rc": 1,
+      "error": "Warning: Basic terminal detected (TERM=dumb). Visual rendering will be limited. For the best experience, use a terminal emulator with truecolor support.\nError authenticating: IneligibleTierError: This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products: https://antigravity.google\n    at throwIneligibleOrProjectIdError (file:///opt/homebrew/lib/node_modules/@google/gemini-cli/bundle/chunk-VLV2BYPM.js:300912:11)\n    at _doSetupUser (file:///opt/homebrew/lib/node_modules/@google/gemini-cli/bundle/chunk-VLV2BYPM.js:300901:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {\n  ineligibleTiers: [\n    {\n      reasonCode: 'UNSUPPORTED_CLIENT',\n      reasonMessage: 'Thi",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0002 - m1-only-scoring-matrix-md-weighted-totals-and-deci/debate/gemini.md"
+    }
+  ],
+  "n_findings": 1,
+  "layout": ".secondlook"
+}

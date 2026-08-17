@@ -1,0 +1,30 @@
+{
+  "discovered": [
+    {
+      "name": "codex",
+      "binary": "/opt/homebrew/bin/codex",
+      "present": true,
+      "reason": ""
+    },
+    {
+      "name": "gemini",
+      "binary": "/opt/homebrew/bin/gemini",
+      "present": true,
+      "reason": ""
+    }
+  ],
+  "used": [
+    "codex",
+    "gemini"
+  ],
+  "assignments": [
+    {
+      "lens": "socratic",
+      "harness": "codex"
+    },
+    {
+      "lens": "simplicity",
+      "harness": "gemini"
+    }
+  ]
+}

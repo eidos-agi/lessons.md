@@ -1,0 +1,14 @@
+id: "ns_c685d4e594be"
+project_id: "61afdcc0-7abc-42d0-aaef-02a8460a6ddc"
+goal: "Close the four honesty leftovers in lessons.md (weighted scores, cold review of 0006/0007, independent apply-rate, secondlook with two live harnesses). Do not publish to PyPI."
+metric: "proven_acceptance_criteria"
+metric_kind: "count"
+charter_hash: "54bf40bcc1c370fb"
+serves_parent: "root"
+stop_max_iters: 8
+stop_zero_delta_n: 3
+signature: null
+created_at: "2026-08-17T16:45:15.409801+00:00"
+closed_at: null
+outcome: null
+repo_path: "/Users/dshanklinbv/repos-eidos-agi/lessons.md"
