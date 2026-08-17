@@ -156,14 +156,29 @@ def register(app: typer.Typer) -> None:
         project_id: Annotated[str, typer.Option(help="Project GUID.")],
         lesson_id: Annotated[str, typer.Argument(help="Lesson ID.")],
         research_id: Annotated[
-            Optional[str], typer.Option(help="research.md project id.")
+            Optional[str],
+            typer.Option(
+                help="research-md project GUID or 0001-style finding id. "
+                "Omit to create a finding in the nearest .research/."
+            ),
         ] = None,
         adr: Annotated[Optional[str], typer.Option(help="ADR identifier.")] = None,
+        use_research: Annotated[
+            bool,
+            typer.Option(
+                "--research/--no-research",
+                help="Shell out to research-md (default on).",
+            ),
+        ] = True,
+        research_path: Annotated[
+            Optional[str],
+            typer.Option(help="Path to a research-md project (contains .research/)."),
+        ] = None,
         json_: Annotated[
             bool, typer.Option("--json", "-J", help="JSON output.")
         ] = False,
     ) -> None:
-        """Link a lesson to research and/or an ADR."""
+        """Promote a lesson by creating or verifying a research-md finding."""
         from ._app import emit
 
         result = _lesson.lesson_promote(
@@ -171,5 +186,7 @@ def register(app: typer.Typer) -> None:
             lesson_id=lesson_id,
             research_id=research_id,
             adr=adr,
+            use_research=use_research,
+            research_path=research_path,
         )
         emit(result, json_mode=json_)

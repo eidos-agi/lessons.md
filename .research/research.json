@@ -1,0 +1,15 @@
+{
+  "id": "742887c1-3a10-47c7-b19f-93357e45e04b",
+  "version": "0.1.0",
+  "projectName": "lessons.md",
+  "created": "2026-08-17",
+  "phase": "research",
+  "transitions": [
+    {
+      "phase": "research",
+      "date": "2026-08-17"
+    }
+  ],
+  "question": "How should lessons.md use research.md so CONFIRMED is earned rather than typed?",
+  "context": "0.2.0 copied research.md internals (gates/status/integrity). Operator correction: 'no I meant literally use it.' docket.md already shells out to shipr on milestone-close. lesson-promote currently writes a string and says it does not create research."
+}

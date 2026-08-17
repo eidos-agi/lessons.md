@@ -53,13 +53,16 @@ def check_integrity(project_root: str) -> list[dict]:
 
         if status == "promoted-research":
             promotes = fm.get("promotes_to") or {}
-            if not (isinstance(promotes, dict) and promotes.get("research_id")):
+            if not (
+                isinstance(promotes, dict)
+                and (promotes.get("research_id") or promotes.get("finding_id"))
+            ):
                 issues.append(
                     {
                         "severity": "error",
                         "message": (
-                            f"{lid} is promoted-research but promotes_to.research_id "
-                            "is missing."
+                            f"{lid} is promoted-research but has no research-md "
+                            "finding_id or research_id."
                         ),
                     }
                 )

@@ -73,8 +73,8 @@ lesson_create          Record what execution taught (default LOW)
     |                  Advisory: pass --origin-task if a docket.md task produced this
 lesson_update          Revise the claim, append body, raise confidence to REASONED
     |
-lesson_promote         Link a research.md finding and/or an ADR
-    |                  Gate: CONFIRMED is now legal
+lesson_promote         Shells out to research-md (finding-create or verify)
+    |                  Stores the real finding id. CONFIRMED is now legal.
 lesson_supersede       Replace a lesson that turned out wrong
 ```
 
@@ -135,7 +135,7 @@ Inside an eidos, boot finds `.eidos/lessons/` the same way research.md finds `.e
 | `lesson-view` | Full frontmatter and body |
 | `lesson-update` | Update fields or append body |
 | `lesson-supersede` | Archive the old file, create the replacement |
-| `lesson-promote` | Link `research_id` and/or `adr` |
+| `lesson-promote` | Run `research-md` to create or verify a finding; or link an ADR. `--no-research` skips the CLI |
 
 ## Development
 

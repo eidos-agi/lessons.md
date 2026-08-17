@@ -20,6 +20,7 @@ from ..gates import (
     gate_confirmed_earned,
     gate_promote_target,
 )
+from ..hooks.research_hook import find_research_root, promote_via_research_md
 from ._common import get_project, today
 
 _DEFAULT_BODY = """## Claim
@@ -65,7 +66,7 @@ def _require_lesson(project_root: str, lesson_id: str) -> tuple[str, object]:
 
 
 def _default_promotes_to() -> dict:
-    return {"research_id": None, "adr": None}
+    return {"research_id": None, "finding_id": None, "adr": None}
 
 
 def _body(content: str) -> str:
@@ -281,21 +282,54 @@ def lesson_promote(
     lesson_id: str,
     research_id: str | None = None,
     adr: str | None = None,
+    *,
+    use_research: bool = True,
+    research_path: str | None = None,
+    research_runner=None,
 ) -> str:
-    """Link a lesson to research and/or an ADR. Does not create either."""
-    target = gate_promote_target(research_id, adr)
+    """Link a lesson to a real research-md finding (and/or an ADR).
+
+    By default this shells out to ``research-md``: project-set + finding-create,
+    or finding-list if ``research_id`` is a 0001-style finding id. Pass
+    ``use_research=False`` only for ADR-only or tests.
+    """
+    project_root = get_project(project_id)
+    can_discover = bool(find_research_root(project_root, research_path))
+    target = gate_promote_target(
+        research_id, adr, can_discover_research=can_discover and use_research
+    )
     if not target["passed"]:
         raise LessonGateError(target["error"])
-    project_root = get_project(project_id)
     fp, lesson = _require_lesson(project_root, lesson_id)
     fm = {**lesson.frontmatter}
     promotes_to = dict(fm.get("promotes_to") or _default_promotes_to())
-    if research_id:
+    hook_line = None
+    want_research = use_research and (research_id or can_discover)
+    if want_research:
+        hook = promote_via_research_md(
+            project_root,
+            lesson_id,
+            str(fm.get("title") or lesson_id),
+            str(fm.get("claim") or ""),
+            research_id,
+            research_path=research_path,
+            enabled=True,
+            runner=research_runner,
+        )
+        hook_line = hook.message
+        if not hook.ok:
+            raise LessonGateError(hook.message)
+        if hook.research_id:
+            promotes_to["research_id"] = hook.research_id
+        if hook.finding_id:
+            promotes_to["finding_id"] = hook.finding_id
+    elif research_id:
         promotes_to["research_id"] = research_id
+
     if adr:
         promotes_to["adr"] = adr
     fm["promotes_to"] = promotes_to
-    if research_id:
+    if promotes_to.get("research_id") or promotes_to.get("finding_id"):
         fm["status"] = "promoted-research"
     else:
         fm["status"] = "promoted-adr"
@@ -307,8 +341,13 @@ def lesson_promote(
         old_path=fp,
     )
     parts = []
-    if research_id:
-        parts.append(f"research_id={research_id}")
-    if adr:
-        parts.append(f"adr={adr}")
-    return f"Promoted **{fm['id']}** → {fm['status']} ({', '.join(parts)})"
+    if promotes_to.get("research_id"):
+        parts.append(f"research_id={promotes_to['research_id']}")
+    if promotes_to.get("finding_id"):
+        parts.append(f"finding_id={promotes_to['finding_id']}")
+    if promotes_to.get("adr"):
+        parts.append(f"adr={promotes_to['adr']}")
+    result = f"Promoted **{fm['id']}** → {fm['status']} ({', '.join(parts)})"
+    if hook_line:
+        result += f"\n{hook_line}"
+    return result

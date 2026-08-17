@@ -103,7 +103,7 @@ def _build_top_level_help() -> str:
             "  lessons-md lesson-view <id>               # full lesson detail",
             "  lessons-md lesson-update <id>             # update fields / append body",
             "  lessons-md lesson-supersede <id>          # replace with a new lesson",
-            "  lessons-md lesson-promote <id>            # link research_id and/or adr",
+            "  lessons-md lesson-promote <id>            # research-md finding-create / verify",
             "",
             "MCP:",
             "  lessons-md mcp serve                      # boots this MCP server (you're talking to it now)",

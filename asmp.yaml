@@ -6,7 +6,7 @@ description: >
   execution. Fourth leg of the Trilogy loop (research → governor →
   docket → lessons). CONFIRMED is illegal until a research.md finding
   earned it.
-version: 0.2.0
+version: 0.3.0
 created_by: agent://grok/software-engineer
 owner: eidos-agi
 section: tools

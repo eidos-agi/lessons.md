@@ -136,7 +136,7 @@ class TestPromote:
     def test_promote_research_id_sets_status_and_link(self, tmp_path):
         pid = _setup_project(tmp_path)
         lesson_create(pid, "Needs research", "This should become a finding.")
-        lesson_promote(pid, "LESSON-0001", research_id="RES-0099")
+        lesson_promote(pid, "LESSON-0001", research_id="RES-0099", use_research=False)
         fm = _frontmatter(tmp_path, "LESSON-0001")
         assert fm["status"] == "promoted-research"
         assert fm["promotes_to"]["research_id"] == "RES-0099"
@@ -144,7 +144,7 @@ class TestPromote:
     def test_confirmed_allowed_after_research_promote(self, tmp_path):
         pid = _setup_project(tmp_path)
         lesson_create(pid, "Needs research", "This should become a finding.")
-        lesson_promote(pid, "LESSON-0001", research_id="RES-0099")
+        lesson_promote(pid, "LESSON-0001", research_id="RES-0099", use_research=False)
         lesson_update(pid, "LESSON-0001", confidence="CONFIRMED")
         assert _frontmatter(tmp_path, "LESSON-0001")["confidence"] == "CONFIRMED"
 

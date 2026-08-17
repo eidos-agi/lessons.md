@@ -16,7 +16,9 @@ def _promoted_by_research(fm: dict) -> bool:
     if fm.get("status") == "promoted-research":
         return True
     promotes_to = fm.get("promotes_to") or {}
-    return isinstance(promotes_to, dict) and bool(promotes_to.get("research_id"))
+    return isinstance(promotes_to, dict) and bool(
+        promotes_to.get("research_id") or promotes_to.get("finding_id")
+    )
 
 
 def gate_confirmed_earned(fm: dict) -> dict:
@@ -29,13 +31,21 @@ def gate_confirmed_earned(fm: dict) -> dict:
     return {"passed": False, "error": _CONFIRMED_ERROR}
 
 
-def gate_promote_target(research_id: str | None, adr: str | None) -> dict:
-    """Promotion must point at research.md and/or an ADR."""
-    if research_id or adr:
+def gate_promote_target(
+    research_id: str | None,
+    adr: str | None,
+    *,
+    can_discover_research: bool = False,
+) -> dict:
+    """Promotion must reach research.md (CLI or id) and/or an ADR."""
+    if research_id or adr or can_discover_research:
         return {"passed": True}
     return {
         "passed": False,
-        "error": "lesson-promote requires --research-id and/or --adr.",
+        "error": (
+            "lesson-promote requires a research.md project "
+            "(`research-md project-init`), --research-id, and/or --adr."
+        ),
     }
 
 

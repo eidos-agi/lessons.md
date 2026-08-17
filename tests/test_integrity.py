@@ -41,7 +41,7 @@ def test_supersede_stays_clean(tmp_path):
 def test_promoted_without_research_id_is_error(tmp_path):
     pid = _setup(tmp_path)
     lesson_create(pid, "Needs research", "Promote me.")
-    lesson_promote(pid, "LESSON-0001", research_id="RES-0099")
+    lesson_promote(pid, "LESSON-0001", research_id="RES-0099", use_research=False)
     fp = find_lesson_file(str(tmp_path), "LESSON-0001")
     parsed = read_markdown(fp)
     parsed.frontmatter["promotes_to"] = {"research_id": None, "adr": None}
