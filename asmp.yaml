@@ -1,0 +1,44 @@
+asmp: "0.1"
+kind: service
+name: lessons-md
+description: >
+  The learning forge — durable, queryable, supersedable lessons from
+  execution. Fourth leg of the Trilogy loop (research → governor →
+  docket → lessons). CONFIRMED is illegal until a research.md finding
+  earned it.
+version: 0.1.0
+created_by: agent://grok/software-engineer
+owner: eidos-agi
+section: tools
+
+aliases:
+  - lessons
+  - lessons.md
+
+runtime:
+  style: mcp
+  exec: lessons-md
+  mcp: lessons-md
+
+capabilities:
+  provides:
+    - lesson.record
+    - lesson.supersede
+    - trilogy.learn
+  requires: []
+  supports:
+    - research-md
+    - governor-md
+    - docket-md
+
+infra:
+  repo: ~/repos-eidos-agi/lessons.md
+  github: https://github.com/eidos-agi/lessons.md
+  pypi: lessons-md
+  install:
+    - pip install lessons-md
+
+display:
+  icon: book
+  label: lessons.md
+  section: tools

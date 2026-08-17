@@ -1,0 +1,49 @@
+[project]
+name = "lessons-md"
+version = "0.1.0"
+description = "The learning forge — durable lessons from execution"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [
+    { name = "Daniel Shanklin", email = "daniel@eidosagi.com" },
+]
+keywords = ["mcp", "lessons", "execution", "agent-tools"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "mcp>=1.0.0",
+    "pyyaml>=6.0",
+    "typer>=0.12.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[project.scripts]
+lessons-md = "lessons_md.cli:main"
+
+[project.entry-points."mcp"]
+lessons-md = "lessons_md.mcp_server:server"
+
+[project.urls]
+Homepage = "https://github.com/eidos-agi/lessons.md"
+Repository = "https://github.com/eidos-agi/lessons.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["lessons_md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,57 @@
+{
+  "blocker_records": [],
+  "blockers": [],
+  "created_at": "2026-08-17T14:56:38.166121Z",
+  "gate_summary": [],
+  "goal": "publish eidos-agi/lessons.md v0.1.0 to GitHub",
+  "learning_prompts": [
+    "What broke or slowed this release?",
+    "What proof was missing until late?",
+    "Which gate should become automatic next time?",
+    "Which human approval should remain explicit?"
+  ],
+  "next_actions": [
+    "read proof_commands from the model; AI runs them; record attempt status"
+  ],
+  "notes": "13 passed. Thin proofs only. LICENSE + asmp.yaml. No PyPI. No CI yet.",
+  "product_id": "lessons.md",
+  "proofs": [
+    "python -m pytest -q"
+  ],
+  "release_model_snapshot": {
+    "approval_gates": [
+      "credentials",
+      "payments",
+      "production mutations",
+      "public publish/tag",
+      "customer/outbound messaging",
+      "PyPI publish"
+    ],
+    "artifact_types": [
+      "docs",
+      "python-package"
+    ],
+    "distribution_channels": [
+      "GitHub",
+      "uvx from git"
+    ],
+    "forge_stack": [
+      "forge-forge",
+      "ship-forge",
+      "security-forge",
+      "foss-forge",
+      "learning-forge",
+      "testr"
+    ],
+    "license": "MIT",
+    "open_source_status": "ready",
+    "proof_commands": [
+      "python -m pytest -q"
+    ],
+    "proof_source": "testr",
+    "repository_visibility": "public"
+  },
+  "schema_version": 1,
+  "source": null,
+  "status": "planned"
+}
