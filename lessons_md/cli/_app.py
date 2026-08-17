@@ -15,12 +15,25 @@ app = typer.Typer(
 )
 
 
+_handed_lessons = False
+
+
 @app.callback()
 def _root_callback() -> None:
-    """Auto-register any lessons.md project rooted at or above CWD before each command."""
-    from .._logic._session import boot_from_cwd
+    """Register the CWD project and hand active lessons on the first command.
 
-    boot_from_cwd()
+    LOOK-0001 F-0001: boot used to register silently. Retrieval has to happen
+    without the agent remembering project-set.
+    """
+    global _handed_lessons
+    from .._logic._session import boot_from_cwd
+    from .._logic.lesson import lesson_relevant
+
+    project_id = boot_from_cwd()
+    if not project_id or _handed_lessons:
+        return
+    _handed_lessons = True
+    typer.echo(lesson_relevant(project_id), err=True)
 
 
 def emit(result, *, json_mode: bool) -> None:

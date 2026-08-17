@@ -1,0 +1,38 @@
+{
+  "look_id": "LOOK-0001",
+  "research_id": "742887c1-3a10-47c7-b19f-93357e45e04b",
+  "research_root": "/Users/dshanklinbv/repos-eidos-agi/lessons.md",
+  "created": [
+    {
+      "local_id": "F-0001",
+      "rc": 0,
+      "stdout": "Finding created: findings/0005-prove-retrieval-occurs-without-the-agent-remembering-it.md\nID: 0005 | Evidence: LOW",
+      "stderr": ""
+    },
+    {
+      "local_id": "F-0002",
+      "rc": 0,
+      "stdout": "Finding created: findings/0006-return-only-lessons-that-are-actually-open.md\nID: 0006 | Evidence: LOW",
+      "stderr": ""
+    },
+    {
+      "local_id": "F-0003",
+      "rc": 0,
+      "stdout": "Finding created: findings/0007-demonstrate-reuse-with-an-independently-observed-outcome.md\nID: 0007 | Evidence: LOW",
+      "stderr": ""
+    },
+    {
+      "local_id": "F-0004",
+      "rc": 0,
+      "stdout": "Finding created: findings/0008-reconcile-the-decision-with-its-locked-weights.md\nID: 0008 | Evidence: LOW",
+      "stderr": ""
+    },
+    {
+      "local_id": "F-0005",
+      "rc": 0,
+      "stdout": "Finding created: findings/0009-subject-the-dogfood-findings-to-the-claimed-cold-challenge.md\nID: 0009 | Evidence: LOW",
+      "stderr": ""
+    }
+  ],
+  "note": "Promoted as LOW. CONFIRMED still requires research-md gates."
+}

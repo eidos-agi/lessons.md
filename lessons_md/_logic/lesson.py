@@ -195,13 +195,16 @@ def _haystack(fm: dict) -> str:
     ).lower()
 
 
+_ACTIVE = frozenset({"open", "promoted-research", "promoted-adr"})
+
+
 def lesson_relevant(project_id: str, query: str | None = None) -> str:
-    """Force retrieval: open lessons the next agent should see before acting."""
+    """Hand the next agent active lessons. Promotion is lineage, not retirement."""
     project_root = get_project(project_id)
     lessons = [
         lesson
         for lesson in list_lessons(project_root, include_superseded=False)
-        if lesson.frontmatter.get("status") != "superseded"
+        if lesson.frontmatter.get("status", "open") in _ACTIVE
     ]
     tokens = [t for t in (query or "").lower().split() if t]
     if tokens:
@@ -212,9 +215,9 @@ def lesson_relevant(project_id: str, query: str | None = None) -> str:
         ]
     if not lessons:
         if query:
-            return f"No open lessons match {query!r}."
-        return "No open lessons. Next session will not be handed anything."
-    lines = ["Open lessons (read these before acting):", ""]
+            return f"No active lessons match {query!r}."
+        return "No active lessons. Next session will not be handed anything."
+    lines = ["Active lessons (read these before acting):", ""]
     for lesson in lessons:
         fm = lesson.frontmatter
         lines.append(

@@ -1,20 +1,7 @@
 """Razor-thin MCP server for lessons-md.
 
-Exposes ONE tool: ``help``. Every other operation happens via the CLI
-(``lessons-md lesson-create``, ``lessons-md project-list``, etc.). This is the
-CLI-first / razor-thin-MCP shape — same contract as research.md, see ADR-006
-in governor.md/.governor/adr/.
-
-Uses the current MCP Server constructor hooks (``on_list_tools`` /
-``on_call_tool``). The decorator API research.md still has is gone from
-this SDK.
-
-Discovery flow:
-  1. Agent calls ``mcp__lessons-md__help()`` — gets the full command tree.
-  2. Agent calls ``mcp__lessons-md__help(subcommand="lesson-create")`` —
-     gets that subcommand's full --help output.
-  3. Agent invokes the actual work via Bash:
-     ``lessons-md lesson-create ... --json``.
+Exposes ONE tool: ``help``. Real work is the CLI. Constructor hooks match
+the MCP SDK on this machine — ``@server.list_tools`` is gone here.
 """
 
 from __future__ import annotations
@@ -33,8 +20,8 @@ HELP_DESCRIPTION = (
     "lessons-md command tree. Call with no args for the top-level surface, "
     "or with subcommand='<name>' for that subcommand's full --help. All "
     "real work happens via Bash: `lessons-md <subcommand> [--json] [opts]`. "
-    "Start every session with `lessons-md status` after project-set "
-    "to orient. This MCP server is razor-thin by design."
+    "The first CLI command from a .lessons/ tree hands active lessons on stderr. "
+    "This MCP server is razor-thin by design."
 )
 
 
@@ -48,9 +35,7 @@ HELP_TOOL = Tool(
                 "type": "string",
                 "description": (
                     "Optional subcommand name (e.g. 'lesson-create', "
-                    "'lesson-promote', 'project-set', 'status'). When set, "
-                    "returns that subcommand's full --help. When omitted, "
-                    "returns the top-level command tree."
+                    "'relevant', 'project-set', 'status')."
                 ),
             },
         },
@@ -88,7 +73,7 @@ def _build_top_level_help() -> str:
             "USAGE:  lessons-md <subcommand> [--json] [options]",
             "",
             "SESSION START:",
-            "  lessons-md project-set <path>             # register, returns project_id",
+            "  lessons-md project-set <path>             # register; first command also hands active lessons",
             "  lessons-md status --project-id <id>       # health + integrity",
             "",
             "PROJECTS:",
@@ -100,7 +85,7 @@ def _build_top_level_help() -> str:
             "LESSONS (CONFIRMED is illegal until research.md earns it):",
             "  lessons-md lesson-create                  # new lesson (default LOW)",
             "  lessons-md lesson-list                    # list (optionally include superseded)",
-            "  lessons-md relevant [query]               # open lessons to read before acting",
+            "  lessons-md relevant [query]               # active lessons to read before acting",
             "  lessons-md lesson-view <id>               # full lesson detail",
             "  lessons-md lesson-update <id>             # update fields / append body",
             "  lessons-md lesson-supersede <id>          # replace with a new lesson",

@@ -1,0 +1,84 @@
+{
+  "id": "LOOK-0001",
+  "topic": "lessons.md 0.4.0 retrieve-on-boot: project-set/relevant, applies-when, research/make-it-better (GAO/Wharton/Tsinghua, peer CHALLENGED every finding), dogfood LESSON-0001/0002/0003. Is this actually better? Did we follow our own lessons? What is still theater?",
+  "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0001 - lessons-md-0-4-0-retrieve-on-boot-project-set-rele",
+  "project_id": "81ad2492-b543-49fb-9e68-cd4271939752",
+  "target": "/Users/dshanklinbv/repos-eidos-agi/lessons.md",
+  "ok": true,
+  "dry_run": false,
+  "stub": false,
+  "used": [
+    "claude",
+    "codex",
+    "cursor-agent",
+    "grok"
+  ],
+  "lenses": [
+    "ai-practices",
+    "socratic",
+    "simplicity",
+    "cleanliness"
+  ],
+  "round1": [
+    {
+      "lens": "ai-practices",
+      "harness": "claude",
+      "rc": 1,
+      "error": "Error: Input must be provided either through stdin or as a prompt argument when using --print\n",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0001 - lessons-md-0-4-0-retrieve-on-boot-project-set-rele/lenses/ai-practices-claude.md",
+      "n_findings": 0
+    },
+    {
+      "lens": "cleanliness",
+      "harness": "grok",
+      "rc": 124,
+      "error": "timed out after 180s",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0001 - lessons-md-0-4-0-retrieve-on-boot-project-set-rele/lenses/cleanliness-grok.md",
+      "n_findings": 0
+    },
+    {
+      "lens": "simplicity",
+      "harness": "cursor-agent",
+      "rc": 1,
+      "error": "\n\u26a0 Workspace Trust Required\n\n  Cursor Agent can execute code and access files in this directory.\n  Do you trust the contents of this directory?\n\n    /Users/dshanklinbv/repos-eidos-agi/lessons.md\n\n  To proceed, you can either:\n    \u2022 Run 'agent' interactively to decide\n    \u2022 Pass --trust, --yolo, or -f if you trust this directory\n",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0001 - lessons-md-0-4-0-retrieve-on-boot-project-set-rele/lenses/simplicity-cursor-agent.md",
+      "n_findings": 0
+    },
+    {
+      "lens": "socratic",
+      "harness": "codex",
+      "rc": 0,
+      "error": "",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0001 - lessons-md-0-4-0-retrieve-on-boot-project-set-rele/lenses/socratic-codex.md",
+      "n_findings": 5
+    }
+  ],
+  "debate": [
+    {
+      "harness": "claude",
+      "rc": 1,
+      "error": "Error: Input must be provided either through stdin or as a prompt argument when using --print\n",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0001 - lessons-md-0-4-0-retrieve-on-boot-project-set-rele/debate/claude.md"
+    },
+    {
+      "harness": "codex",
+      "rc": 0,
+      "error": "",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0001 - lessons-md-0-4-0-retrieve-on-boot-project-set-rele/debate/codex.md"
+    },
+    {
+      "harness": "cursor-agent",
+      "rc": 1,
+      "error": "\n\u26a0 Workspace Trust Required\n\n  Cursor Agent can execute code and access files in this directory.\n  Do you trust the contents of this directory?\n\n    /Users/dshanklinbv/repos-eidos-agi/lessons.md\n\n  To proceed, you can either:\n    \u2022 Run 'agent' interactively to decide\n    \u2022 Pass --trust, --yolo, or -f if you trust this directory\n",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0001 - lessons-md-0-4-0-retrieve-on-boot-project-set-rele/debate/cursor-agent.md"
+    },
+    {
+      "harness": "grok",
+      "rc": 124,
+      "error": "timed out after 180s",
+      "path": "/Users/dshanklinbv/repos-eidos-agi/lessons.md/.secondlook/runs/LOOK-0001 - lessons-md-0-4-0-retrieve-on-boot-project-set-rele/debate/grok.md"
+    }
+  ],
+  "n_findings": 5,
+  "layout": ".secondlook"
+}

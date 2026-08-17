@@ -164,12 +164,22 @@ class TestPromote:
         )
         all_open = lesson_relevant(pid)
         assert "LESSON-0001" in all_open
-        assert "read these before acting" in all_open
+        assert "Active lessons" in all_open
         matched = lesson_relevant(pid, "improving lessons.md")
         assert "LESSON-0001" in matched
         assert "when:" in matched
         missed = lesson_relevant(pid, "railway deploy")
-        assert "No open lessons match" in missed
+        assert "No active lessons match" in missed
+
+    def test_relevant_keeps_promoted_drops_retired(self, tmp_path):
+        pid = _setup_project(tmp_path)
+        lesson_create(pid, "Keep after promote", "Promotion is lineage.")
+        lesson_create(pid, "Retire this", "Should not be handed back.")
+        lesson_promote(pid, "LESSON-0001", research_id="RES-0099", use_research=False)
+        lesson_update(pid, "LESSON-0002", status="retired")
+        out = lesson_relevant(pid)
+        assert "LESSON-0001" in out
+        assert "LESSON-0002" not in out
 
     def test_project_set_hands_open_lessons(self, tmp_path):
         from lessons_md._logic.project import project_set

@@ -28,16 +28,17 @@ def _walk_up_for_lessons(start: Path) -> Path | None:
         cur = cur.parent
 
 
-def boot_from_cwd(path: str | None = None) -> None:
+def boot_from_cwd(path: str | None = None) -> str | None:
     """Register any lessons.md project rooted at or above CWD.
 
-    Safe to call repeatedly. Silently no-ops if no project is found.
+    Returns the project_id when a project was registered. No-ops if none found.
     """
     start = Path(path).resolve() if path else Path.cwd()
     root = _walk_up_for_lessons(start)
     if root is None:
-        return
+        return None
     try:
-        register_project(str(root))
+        info = register_project(str(root))
     except Exception:
-        return
+        return None
+    return info.get("id")

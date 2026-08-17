@@ -1,0 +1,58 @@
+{
+  "discovered": [
+    {
+      "name": "claude",
+      "binary": "/Users/dshanklinbv/.local/bin/claude",
+      "present": true,
+      "reason": ""
+    },
+    {
+      "name": "codex",
+      "binary": "/opt/homebrew/bin/codex",
+      "present": true,
+      "reason": ""
+    },
+    {
+      "name": "cursor-agent",
+      "binary": "/Users/dshanklinbv/.local/bin/cursor-agent",
+      "present": true,
+      "reason": ""
+    },
+    {
+      "name": "grok",
+      "binary": "/Users/dshanklinbv/.grok/bin/grok",
+      "present": true,
+      "reason": ""
+    },
+    {
+      "name": "gemini",
+      "binary": "/opt/homebrew/bin/gemini",
+      "present": true,
+      "reason": ""
+    }
+  ],
+  "used": [
+    "claude",
+    "codex",
+    "cursor-agent",
+    "grok"
+  ],
+  "assignments": [
+    {
+      "lens": "ai-practices",
+      "harness": "claude"
+    },
+    {
+      "lens": "socratic",
+      "harness": "codex"
+    },
+    {
+      "lens": "simplicity",
+      "harness": "cursor-agent"
+    },
+    {
+      "lens": "cleanliness",
+      "harness": "grok"
+    }
+  ]
+}
