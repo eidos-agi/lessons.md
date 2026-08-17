@@ -57,7 +57,9 @@
   "product_id": "lessons.md",
   "project_root": "/Users/dshanklinbv/repos-eidos-agi/lessons.md",
   "proof_commands": [
-    "python -m pytest -q"
+    "python -m pytest -q",
+    "ruff check lessons_md tests",
+    "ruff format --check lessons_md tests"
   ],
   "proof_source": "testr",
   "purpose": "CLI + razor-thin MCP for LESSON-NNNN records. Commit .lessons/. First ship is GitHub only — PyPI stays an explicit approval gate.",

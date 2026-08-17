@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 from lessons_md._logic.lesson import (
     lesson_create,
     lesson_list,
@@ -15,6 +13,7 @@ from lessons_md._logic.lesson import (
     lesson_view,
 )
 from lessons_md.config import init_project, register_project
+from lessons_md.errors import LessonError, LessonNotFoundError
 from lessons_md.files import find_lesson_file, read_markdown
 
 
@@ -32,13 +31,15 @@ def _frontmatter(tmp_path, lesson_id: str) -> dict:
 
 
 def _assert_rejected(fn, *args, needle: str, **kwargs) -> None:
-    """Accept ValueError or an error string containing needle."""
+    """Accept LessonError/ValueError or an error string containing needle."""
     try:
         result = fn(*args, **kwargs)
-    except ValueError as exc:
+    except (LessonError, ValueError) as exc:
         assert needle in str(exc)
         return
-    assert isinstance(result, str), f"expected ValueError or error string, got {type(result)}"
+    assert isinstance(result, str), (
+        f"expected error or error string, got {type(result)}"
+    )
     assert needle in result
 
 
@@ -51,6 +52,7 @@ class TestCreateAndRead:
             "Call project-set before any lesson write.",
         )
         assert "LESSON-0001" in out
+        assert "origin_task" in out  # advisory: no origin_task
 
         fp = find_lesson_file(str(tmp_path), "LESSON-0001")
         assert fp is not None
@@ -150,3 +152,12 @@ class TestPromote:
         pid = _setup_project(tmp_path)
         lesson_create(pid, "Needs a target", "Promotion needs a destination.")
         _assert_rejected(lesson_promote, pid, "LESSON-0001", needle="research")
+
+    def test_view_missing_raises(self, tmp_path):
+        pid = _setup_project(tmp_path)
+        try:
+            lesson_view(pid, "LESSON-9999")
+        except LessonNotFoundError as exc:
+            assert "LESSON-9999" in str(exc)
+        else:
+            raise AssertionError("expected LessonNotFoundError")

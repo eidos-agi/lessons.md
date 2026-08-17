@@ -1,0 +1,18 @@
+{
+  "created_at": "2026-08-17T15:21:38.285704Z",
+  "goal": "prove lessons.md 0.2.0 research-md lift",
+  "notes": "40 passed. ruff clean.",
+  "product_id": "lessons.md",
+  "proofs": [
+    "python -m pytest -q",
+    "ruff check lessons_md tests",
+    "ruff format --check lessons_md tests"
+  ],
+  "schema_version": 1,
+  "status": "passed",
+  "test_commands_snapshot": [
+    "python -m pytest -q",
+    "ruff check lessons_md tests",
+    "ruff format --check lessons_md tests"
+  ]
+}

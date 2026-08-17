@@ -1,0 +1,31 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.2.0] - 2026-08-17
+
+### Added
+- `status` — project health: each lesson, promotions, integrity vs disk (research.md analog).
+- `gates.py` — CONFIRMED is earned by a research.md promotion; promote requires a target.
+- `integrity.py` — recorded status must match the files on disk.
+- `errors.py` — `LessonGateError`, `LessonValidationError`, `LessonNotFoundError`.
+- Eidos-aware boot: `.eidos/lessons/lessons.json` is found the same way research.md finds `.eidos/research/`.
+- `project-get` alias of `project-list`.
+- Advisories on create: missing `origin_task`, unpromoted REASONED.
+- GitHub Actions CI (ruff + pytest 3.11/3.12/3.13 + wheel install).
+
+### Changed
+- README rewritten to match the research.md product surface (install, MCP, workflow, gates). CRUD is documented — it already shipped in 0.1.0.
+- `__version__` is read from package metadata.
+- MCP `help` tree now starts at `status` (research.md session shape). Constructor hooks match the current MCP SDK; the decorator API research.md still uses is gone here.
+
+## [0.1.0] - 2026-08-17
+
+### Added
+- Initial public release: CLI + razor-thin MCP for `LESSON-NNNN` records.
+- Project GUID routing (`project-init` / `project-set` / `project-list` / `project-info`).
+- Lesson create, list, view, update, supersede, promote.
+- CONFIRMED rejected until `lesson-promote --research-id`.

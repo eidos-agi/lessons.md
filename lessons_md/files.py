@@ -1,6 +1,6 @@
 """Markdown file I/O, ID generation, lesson path helpers.
 
-Lesson CRUD lives in _logic/lesson.py later. This module is I/O + paths only.
+Lesson CRUD lives in _logic/lesson.py. This module is I/O + paths only.
 """
 
 import os

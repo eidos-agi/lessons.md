@@ -6,7 +6,10 @@ import uuid
 from dataclasses import dataclass
 from datetime import date
 
+from .errors import LessonValidationError
+
 LESSONS_DIR = ".lessons"
+EIDOS_LESSONS_DIR = ".eidos/lessons"
 CONFIG_FILENAME = "lessons.json"
 
 DIRECTORIES = {
@@ -90,13 +93,13 @@ def register_project(project_path: str) -> dict[str, str]:
 
 def resolve_project(project_id: object) -> str:
     if not project_id or not isinstance(project_id, str):
-        raise ValueError(
+        raise LessonValidationError(
             "Missing required parameter: project_id. "
             "Call project_set with the project path to register it."
         )
     project_path = _guid_to_path.get(project_id)
     if not project_path:
-        raise ValueError(
+        raise LessonValidationError(
             f"Unknown project_id '{project_id}'. "
             "Call project_set with the project path to register it."
         )

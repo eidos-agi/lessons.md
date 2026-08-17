@@ -2,7 +2,12 @@
 
 Exposes ONE tool: ``help``. Every other operation happens via the CLI
 (``lessons-md lesson-create``, ``lessons-md project-list``, etc.). This is the
-CLI-first / razor-thin-MCP shape — see ADR-006 in governor.md/.governor/adr/.
+CLI-first / razor-thin-MCP shape — same contract as research.md, see ADR-006
+in governor.md/.governor/adr/.
+
+Uses the current MCP Server constructor hooks (``on_list_tools`` /
+``on_call_tool``). The decorator API research.md still has is gone from
+this SDK.
 
 Discovery flow:
   1. Agent calls ``mcp__lessons-md__help()`` — gets the full command tree.
@@ -28,7 +33,7 @@ HELP_DESCRIPTION = (
     "lessons-md command tree. Call with no args for the top-level surface, "
     "or with subcommand='<name>' for that subcommand's full --help. All "
     "real work happens via Bash: `lessons-md <subcommand> [--json] [opts]`. "
-    "Start every session with `lessons-md project-info` after project-set "
+    "Start every session with `lessons-md status` after project-set "
     "to orient. This MCP server is razor-thin by design."
 )
 
@@ -43,9 +48,9 @@ HELP_TOOL = Tool(
                 "type": "string",
                 "description": (
                     "Optional subcommand name (e.g. 'lesson-create', "
-                    "'lesson-promote', 'project-set'). When set, returns "
-                    "that subcommand's full --help. When omitted, returns "
-                    "the top-level command tree."
+                    "'lesson-promote', 'project-set', 'status'). When set, "
+                    "returns that subcommand's full --help. When omitted, "
+                    "returns the top-level command tree."
                 ),
             },
         },
@@ -84,14 +89,16 @@ def _build_top_level_help() -> str:
             "",
             "SESSION START:",
             "  lessons-md project-set <path>             # register, returns project_id",
-            "  lessons-md project-info --project-id <id> # one-line orient",
+            "  lessons-md status --project-id <id>       # health + integrity",
             "",
             "PROJECTS:",
             "  lessons-md project-init <path>            # initialize a new project",
             "  lessons-md project-list                   # list registered projects",
+            "  lessons-md project-get                    # alias of project-list",
+            "  lessons-md project-info --project-id <id> # counts + integrity one-liner",
             "",
-            "LESSONS:",
-            "  lessons-md lesson-create                  # new lesson (confidence CONFIRMED illegal)",
+            "LESSONS (CONFIRMED is illegal until research.md earns it):",
+            "  lessons-md lesson-create                  # new lesson (default LOW)",
             "  lessons-md lesson-list                    # list (optionally include superseded)",
             "  lessons-md lesson-view <id>               # full lesson detail",
             "  lessons-md lesson-update <id>             # update fields / append body",

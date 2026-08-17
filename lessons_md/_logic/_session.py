@@ -2,7 +2,8 @@
 
 The MCP server kept a long-lived in-memory ``project_id → path`` map; a
 fresh CLI subprocess does not. ``boot_from_cwd()`` walks up from CWD,
-finds any directory with ``.lessons/lessons.json``, and registers it.
+finds ``.lessons/lessons.json`` or ``.eidos/lessons/lessons.json``, and
+registers it. Same eidos-aware-but-not-required property as research.md.
 """
 
 from __future__ import annotations
@@ -14,10 +15,13 @@ from ..config import register_project
 
 
 def _walk_up_for_lessons(start: Path) -> Path | None:
-    """Walk up looking for a lessons.md project (``.lessons/lessons.json`` only)."""
+    """Walk up looking for a lessons.md project, eidos-aware or legacy."""
     cur = start.resolve()
     while True:
         if (cur / _cfg.LESSONS_DIR / _cfg.CONFIG_FILENAME).is_file():
+            return cur
+        if (cur / ".eidos" / "lessons" / _cfg.CONFIG_FILENAME).is_file():
+            _cfg.LESSONS_DIR = _cfg.EIDOS_LESSONS_DIR
             return cur
         if cur.parent == cur:
             return None

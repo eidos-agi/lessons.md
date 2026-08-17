@@ -51,6 +51,18 @@ def register(app: typer.Typer) -> None:
         result = _project.project_list()
         emit(result, json_mode=json_)
 
+    @app.command("project-get")
+    def cmd_project_get(
+        json_: Annotated[
+            bool, typer.Option("--json", "-J", help="JSON output.")
+        ] = False,
+    ) -> None:
+        """Show all registered lessons.md projects (alias of project-list)."""
+        from ._app import emit
+
+        result = _project.project_list()
+        emit(result, json_mode=json_)
+
     @app.command("project-info")
     def cmd_project_info(
         project_id: Annotated[str, typer.Option(help="Project GUID.")],
@@ -62,4 +74,17 @@ def register(app: typer.Typer) -> None:
         from ._app import emit
 
         result = _project.project_info(project_id=project_id)
+        emit(result, json_mode=json_)
+
+    @app.command("status")
+    def cmd_status(
+        project_id: Annotated[str, typer.Option(help="Project GUID.")],
+        json_: Annotated[
+            bool, typer.Option("--json", "-J", help="JSON output.")
+        ] = False,
+    ) -> None:
+        """Show project health: lessons, promotions, integrity vs disk."""
+        from ._app import emit
+
+        result = _project.status(project_id=project_id)
         emit(result, json_mode=json_)

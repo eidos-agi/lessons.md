@@ -60,5 +60,10 @@ def main() -> None:
     except (typer.Exit, typer.Abort, SystemExit):
         raise
     except Exception as e:
-        typer.echo(f"error: {type(e).__name__}: {e}", err=True)
+        from ..errors import LessonError
+
+        if isinstance(e, LessonError):
+            typer.echo(f"error: {e}", err=True)
+        else:
+            typer.echo(f"error: {type(e).__name__}: {e}", err=True)
         sys.exit(1)

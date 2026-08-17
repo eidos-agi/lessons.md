@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 
-from ..config import resolve_project
+from ..errors import LessonGateError, LessonNotFoundError
 from ..files import (
     find_lesson_file,
     lesson_path,
@@ -13,7 +13,14 @@ from ..files import (
     read_markdown,
     write_markdown,
 )
-from ._common import today
+from ..gates import (
+    advisory_no_origin,
+    advisory_reasoned_unpromoted,
+    gate_claim_present,
+    gate_confirmed_earned,
+    gate_promote_target,
+)
+from ._common import get_project, today
 
 _DEFAULT_BODY = """## Claim
 
@@ -25,11 +32,6 @@ _DEFAULT_BODY = """## Claim
 
 ## Promotion
 """
-
-_CONFIRMED_ERROR = (
-    "CONFIRMED is illegal until a research.md finding earned it. "
-    "Use lesson-promote after research."
-)
 
 _FM_ORDER = (
     "id",
@@ -47,18 +49,19 @@ _FM_ORDER = (
 
 
 def _reject_confirmed(confidence: str | None, fm: dict | None = None) -> None:
-    if confidence is None or str(confidence).upper() != "CONFIRMED":
-        return
-    if fm is not None and _confirmed_allowed(fm):
-        return
-    raise ValueError(_CONFIRMED_ERROR)
+    preview = dict(fm or {})
+    if confidence is not None:
+        preview["confidence"] = confidence
+    result = gate_confirmed_earned(preview)
+    if not result["passed"]:
+        raise LessonGateError(result["error"])
 
 
-def _confirmed_allowed(fm: dict) -> bool:
-    if fm.get("status") == "promoted-research":
-        return True
-    promotes_to = fm.get("promotes_to") or {}
-    return isinstance(promotes_to, dict) and bool(promotes_to.get("research_id"))
+def _require_lesson(project_root: str, lesson_id: str) -> tuple[str, object]:
+    fp = find_lesson_file(project_root, lesson_id)
+    if not fp:
+        raise LessonNotFoundError("Lesson", lesson_id)
+    return fp, read_markdown(fp)
 
 
 def _default_promotes_to() -> dict:
@@ -136,8 +139,11 @@ def lesson_create(
     origin_task: str | None = None,
 ) -> str:
     """Create a lesson. CONFIRMED is illegal until research earns it."""
+    claim_gate = gate_claim_present(claim)
+    if not claim_gate["passed"]:
+        raise LessonGateError(claim_gate["error"])
     _reject_confirmed(confidence)
-    project_root = resolve_project(project_id)
+    project_root = get_project(project_id)
     id = next_lesson_id(project_root)
     fm: dict = {
         "id": id,
@@ -153,12 +159,20 @@ def lesson_create(
         "concerns": concerns if concerns is not None else ["paseo"],
     }
     _write_lesson(project_root, fm, _body(content))
-    return f"Created lesson **{id}** — {title}"
+    result = f"Created lesson **{id}** — {title}"
+    advisories = [
+        a
+        for a in (advisory_no_origin(origin_task), advisory_reasoned_unpromoted(fm))
+        if a
+    ]
+    if advisories:
+        result += "\n\n" + "\n".join(f"⚠ {a}" for a in advisories)
+    return result
 
 
 def lesson_list(project_id: str, include_superseded: bool = False) -> str:
     """List lessons as ``**LESSON-0001** [open/LOW] — title``."""
-    project_root = resolve_project(project_id)
+    project_root = get_project(project_id)
     lessons = list_lessons(project_root, include_superseded=include_superseded)
     if not lessons:
         return "No lessons."
@@ -173,11 +187,8 @@ def lesson_list(project_id: str, include_superseded: bool = False) -> str:
 
 def lesson_view(project_id: str, lesson_id: str) -> str:
     """View a lesson's full frontmatter and body."""
-    project_root = resolve_project(project_id)
-    fp = find_lesson_file(project_root, lesson_id)
-    if not fp:
-        return f"Lesson {lesson_id} not found."
-    lesson = read_markdown(fp)
+    project_root = get_project(project_id)
+    _fp, lesson = _require_lesson(project_root, lesson_id)
     return _format_lesson(lesson.frontmatter, lesson.content)
 
 
@@ -193,12 +204,13 @@ def lesson_update(
     status: str | None = None,
 ) -> str:
     """Update a lesson. Renames the file when the title changes."""
-    project_root = resolve_project(project_id)
-    fp = find_lesson_file(project_root, lesson_id)
-    if not fp:
-        return f"Lesson {lesson_id} not found."
-    lesson = read_markdown(fp)
+    project_root = get_project(project_id)
+    fp, lesson = _require_lesson(project_root, lesson_id)
     fm = {**lesson.frontmatter}
+    if claim is not None:
+        claim_gate = gate_claim_present(claim)
+        if not claim_gate["passed"]:
+            raise LessonGateError(claim_gate["error"])
     _reject_confirmed(confidence, fm)
     if title is not None:
         fm["title"] = title
@@ -236,11 +248,8 @@ def lesson_supersede(
 ) -> str:
     """Create a new lesson that supersedes ``old_id`` and archive the old file."""
     _reject_confirmed(confidence)
-    project_root = resolve_project(project_id)
-    fp = find_lesson_file(project_root, old_id)
-    if not fp:
-        return f"Lesson {old_id} not found."
-    old = read_markdown(fp)
+    project_root = get_project(project_id)
+    fp, old = _require_lesson(project_root, old_id)
     old_fm = {**old.frontmatter, "status": "superseded"}
     _write_lesson(
         project_root,
@@ -274,13 +283,11 @@ def lesson_promote(
     adr: str | None = None,
 ) -> str:
     """Link a lesson to research and/or an ADR. Does not create either."""
-    if not research_id and not adr:
-        raise ValueError("lesson-promote requires --research-id and/or --adr.")
-    project_root = resolve_project(project_id)
-    fp = find_lesson_file(project_root, lesson_id)
-    if not fp:
-        return f"Lesson {lesson_id} not found."
-    lesson = read_markdown(fp)
+    target = gate_promote_target(research_id, adr)
+    if not target["passed"]:
+        raise LessonGateError(target["error"])
+    project_root = get_project(project_id)
+    fp, lesson = _require_lesson(project_root, lesson_id)
     fm = {**lesson.frontmatter}
     promotes_to = dict(fm.get("promotes_to") or _default_promotes_to())
     if research_id:

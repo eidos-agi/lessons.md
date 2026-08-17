@@ -28,13 +28,23 @@
   "role": "ai_config_and_memory",
   "schema_version": 1,
   "test_commands": [
-    "python -m pytest -q"
+    "python -m pytest -q",
+    "ruff check lessons_md tests",
+    "ruff format --check lessons_md tests"
   ],
   "test_suites": [
     {
       "id": "unit",
       "commands": [
         "python -m pytest -q"
+      ],
+      "when": "every ship"
+    },
+    {
+      "id": "lint",
+      "commands": [
+        "ruff check lessons_md tests",
+        "ruff format --check lessons_md tests"
       ],
       "when": "every ship"
     }
