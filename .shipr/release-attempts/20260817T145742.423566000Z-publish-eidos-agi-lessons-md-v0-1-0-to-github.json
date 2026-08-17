@@ -1,0 +1,59 @@
+{
+  "blocker_records": [],
+  "blockers": [],
+  "created_at": "2026-08-17T14:57:42.423586Z",
+  "gate_summary": [],
+  "goal": "publish eidos-agi/lessons.md v0.1.0 to GitHub",
+  "learning_prompts": [
+    "What broke or slowed this release?",
+    "What proof was missing until late?",
+    "Which gate should become automatic next time?",
+    "Which human approval should remain explicit?"
+  ],
+  "next_actions": [
+    "route lessons to learning-forge",
+    "watch rollback and support signals"
+  ],
+  "notes": "Shipped 351bf0f to https://github.com/eidos-agi/lessons.md (public). 13 pytest passed. No PyPI. Lesson: detect proofs were ruff+changelog with neither present — hand-edit before commit. Next automatic gate: GitHub Actions pytest. Keep PyPI as explicit approval.",
+  "product_id": "lessons.md",
+  "proofs": [
+    "python -m pytest -q",
+    "git push origin main"
+  ],
+  "release_model_snapshot": {
+    "approval_gates": [
+      "credentials",
+      "payments",
+      "production mutations",
+      "public publish/tag",
+      "customer/outbound messaging",
+      "PyPI publish"
+    ],
+    "artifact_types": [
+      "docs",
+      "python-package"
+    ],
+    "distribution_channels": [
+      "GitHub",
+      "uvx from git"
+    ],
+    "forge_stack": [
+      "forge-forge",
+      "ship-forge",
+      "security-forge",
+      "foss-forge",
+      "learning-forge",
+      "testr"
+    ],
+    "license": "MIT",
+    "open_source_status": "ready",
+    "proof_commands": [
+      "python -m pytest -q"
+    ],
+    "proof_source": "testr",
+    "repository_visibility": "public"
+  },
+  "schema_version": 1,
+  "source": null,
+  "status": "shipped"
+}
